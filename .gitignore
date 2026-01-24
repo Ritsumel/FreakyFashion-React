@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Server data & uploads
+server/data/
+server/public/images/

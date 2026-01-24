@@ -3,10 +3,16 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
+const cors = require('cors');
 
 const adminRouter = require('./routes/admin');
+const productsRouter = require('./routes/products');
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+}));
 
 /* ===== Middleware ===== */
 app.use(morgan('dev'));
@@ -30,6 +36,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/admin', adminRouter);
+app.use('/admin/products', productsRouter);
 
 /* ===== Start server ===== */
 const PORT = 5000;

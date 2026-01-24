@@ -1,0 +1,121 @@
+footer {
+    padding-top: 20px;
+
+    .parent {
+
+        .menu {
+            @include sm {
+                background-color: $peach;
+            }
+        }
+
+        .icons {
+            display: grid;
+            padding: 0 30px 40px 30px;
+            gap: 40px;
+            
+            @include sm { grid-template-columns: repeat(2, 1fr); }
+            @include lg { display: flex; gap: 20px; justify-content: space-around; }
+
+            .icon-text {
+                @include text-xs;
+                margin: 0;
+            }
+
+            i {
+                font-size: 60px;
+
+                @include sm { padding-left: 10%; }
+                @include lg { padding-left: 0; }
+            }
+
+            .icon {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+
+        }
+
+        .mobile-view-footer-links {
+            
+            @include sm { display: none; }
+            
+            .accordion-button {
+                height: 40px;
+                border: 1px solid black;
+
+                p {
+                    font-size: 1.2em;
+                    margin-left: -15px;
+                    margin-top: 20px;
+                }
+            }
+
+            .accordion-body {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                font-size: 1.2em;
+                padding-bottom: 60px;
+
+                a {
+                    text-decoration: none;
+                    color: black;
+                }
+            }
+
+        }
+
+        .footer-links {
+            display: none;
+
+            @include sm {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                padding: 40px;
+            }
+
+            @include lg { grid-template-columns: repeat(5,1fr); }
+        }
+
+        .shopping-links, .my-pages-links, 
+        .customer-service-links {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            font-size: 1.3em;
+
+            p {
+                font-weight: 700;
+                margin: 0;
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+        }
+
+        .cr-text {
+            font-size: 1.2em;
+            text-align: center;
+            padding: 35px 0 20px 0;
+
+            i {
+                padding-right: 5px;
+                font-size: 20px;
+            }
+        }
+    }
+}
+
+.page-checkout {
+    footer {
+        .icons {
+            @include sm {
+                display: none;
+            }
+        }
+    }
+}

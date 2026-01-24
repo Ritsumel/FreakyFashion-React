@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
-const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 
 /* ===== Helpers ===== */
 function slugify(text) {
@@ -23,22 +21,9 @@ const db = new sqlite3.Database(
   path.join(__dirname, '../data/freaky-fashion.db')
 );
 
-/* ===== Multer ===== */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../public/images/products'));
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ storage });
-
 /* ===== Routes ===== */
 
-/* GET all products */
+/* GET all products (admin) */
 router.get('/products', (req, res, next) => {
   db.all('SELECT * FROM products ORDER BY name ASC', [], (err, products) => {
     if (err) return next(err);
@@ -50,21 +35,16 @@ router.get('/products', (req, res, next) => {
   });
 });
 
-/* POST new product */
-router.post('/products', upload.single('image'), (req, res, next) => {
-  const { name, description, brand, sku } = req.body;
+/* POST new product (admin) */
+router.post('/products', (req, res, next) => {
+  const { name, description, brand, sku, image } = req.body;
   const price = parseFloat(req.body.price) || 0;
-  const image = req.file ? req.file.filename : null;
   const alt = `${name} - ${brand}`;
 
-  const createdAt = new Date(req.body['publication-date'])
+  const createdAt = new Date()
     .toISOString()
     .replace('T', ' ')
     .substring(0, 19);
-
-  const categories = Array.isArray(req.body.categories)
-    ? req.body.categories
-    : req.body.categories ? [req.body.categories] : [];
 
   const insertQuery = `
     INSERT INTO products (name, description, brand, image, sku, price, created_at, alt)
@@ -83,49 +63,22 @@ router.post('/products', upload.single('image'), (req, res, next) => {
       db.run(
         'UPDATE products SET slug = ? WHERE id = ?',
         [slug, productId],
-        (err) => {
-          if (err) return next(err);
-
-          categories.forEach(category => {
-            db.run(
-              'INSERT OR IGNORE INTO categories (name) VALUES (?)',
-              [category]
-            );
-          });
-
-          res.status(201).json({
-            success: true,
-            productId
-          });
+        () => {
+          res.status(201).json({ success: true });
         }
       );
     }
   );
 });
 
-/* DELETE product */
+/* DELETE product (admin) */
 router.delete('/products/:id', (req, res, next) => {
   const id = req.params.id;
 
-  db.get(
-    'SELECT image FROM products WHERE id = ?',
-    [id],
-    (err, product) => {
-      if (err) return next(err);
-      if (!product) return res.status(404).json({ error: 'Not found' });
-
-      const imagePath = product.image
-        ? path.join(__dirname, '../public/images/products', product.image)
-        : null;
-
-      db.run('DELETE FROM product_categories WHERE product_id = ?', [id], () => {
-        db.run('DELETE FROM products WHERE id = ?', [id], () => {
-          if (imagePath) fs.unlink(imagePath, () => {});
-          res.json({ success: true });
-        });
-      });
-    }
-  );
+  db.run('DELETE FROM products WHERE id = ?', [id], function (err) {
+    if (err) return next(err);
+    res.json({ success: true });
+  });
 });
 
 module.exports = router;

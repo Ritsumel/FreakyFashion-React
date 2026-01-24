@@ -1,0 +1,93 @@
+.product-grid {
+    display: grid;
+    gap: 0.5rem 2rem;
+
+    @include sm { grid-template-columns: repeat(2, 1fr); }
+    @include lg { grid-template-columns: repeat(4, 1fr); }
+
+    a { text-decoration: none; }
+
+    .product-card {
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.02);
+        }
+
+        &-image {
+            position: relative;
+
+            img {
+                display: block;
+                width: 100%;
+            }
+
+            .news-tag {
+                position: absolute;
+                top: 0.9em;
+                left: 0.9em;
+                height: 3.3em;
+                width: 6.8em;
+                border-radius: 10px;
+                background-color: black;
+
+                @include sm {
+                    top: 0.9em;
+                    left: 0.9em;
+                    height: 2.5em;
+                    width: 4.6em;
+                    border-radius: 6px;
+                }
+                
+                p {
+                    color: white;
+                    margin-left: 1.5em;
+                    margin-top: 0.9em;
+                    font-size: 1.2em;
+
+                    @include sm {
+                        margin-left: 1.4em;
+                        margin-top: 0.8em;
+                        font-size: 0.8em;
+                    }
+                }
+            }
+
+            .bookmark-tag {
+                position: absolute;
+                bottom: 20px;
+                right: 15px;
+                font-size: 60px;
+                border: none;
+                background-color: transparent;
+                color: $dark-peach;
+
+                @include sm {
+                    bottom: 15px;
+                    right: 8px;
+                    font-size: 50px;
+                }
+
+                @include lg { font-size: 40px; }
+            }
+        }
+
+        &-footer {
+
+            .upper-text {
+                display: flex;
+                justify-content: space-between;
+                font-size: 1em;
+                padding-top: 20px
+            }
+
+            h4 { color: black; @include text-xs; }
+
+            p {
+                @include text-xxs;
+                color: rgba(0, 0, 0, 0.622);
+                padding-top: 5px;
+            }
+        }
+    }
+}

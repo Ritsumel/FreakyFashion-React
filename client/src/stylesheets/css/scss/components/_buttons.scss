@@ -1,0 +1,65 @@
+.btn-freaky-blue {
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+
+    &:hover {
+        background-color: $freaky-blue;
+        color: white !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.071);
+    }
+}
+
+.btn-soft-glow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: $freaky-blue; // base color
+    color: white !important;
+    padding: 12px 30px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+    // Soft glow on hover
+    &:hover {
+        background-color: $light-freaky-blue; // lighter tint
+        box-shadow: 0 0 20px rgba(255, 111, 97, 0.6);
+    }
+
+    // Shine effect layer
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+            120deg,
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        transform: skewX(-20deg);
+        pointer-events: none;
+    }
+
+    // Trigger the shine
+    &:hover::before {
+        animation: shine 0.8s ease-out forwards;
+    }
+}
+
+@keyframes shine {
+    0% {
+        left: -75%;
+    }
+    100% {
+        left: 125%;
+    }
+}
