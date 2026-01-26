@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 type Product = {
   id: number;
   name: string;
+  slug: string;
   sku?: string;
   price: number;
 };
@@ -13,7 +14,7 @@ const AdminProducts = () => {
   const [productCount, setProductCount] = useState(0);
 
   const fetchProducts = async () => {
-    const res = await fetch('http://localhost:5000/admin/products');
+    const res = await fetch('http://localhost:5000/api/admin/products');
     const data = await res.json();
     setProducts(data.products);
     setProductCount(data.productCount);
@@ -22,7 +23,7 @@ const AdminProducts = () => {
   const deleteProduct = async (id: number) => {
     if (!confirm('Är du säker?')) return;
 
-    await fetch(`http://localhost:5000/admin/products/${id}`, {
+    await fetch(`http://localhost:5000/api/admin/products/${id}`, {
       method: 'DELETE'
     });
 
@@ -60,7 +61,9 @@ const AdminProducts = () => {
                 <h6>Namn</h6>
                 {products.map((item, i) => (
                   <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                    {item.name}
+                    <Link to={`/products/${item.slug}`} className="admin-product-link">
+                      {item.name}
+                    </Link>
                   </p>
                 ))}
               </div>

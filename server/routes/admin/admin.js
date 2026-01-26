@@ -18,7 +18,7 @@ function slugify(text) {
 
 /* ===== Database ===== */
 const db = new sqlite3.Database(
-  path.join(__dirname, '../data/freaky-fashion.db')
+  path.join(__dirname, '../../data/freaky-fashion.db')
 );
 
 /* ===== Routes ===== */

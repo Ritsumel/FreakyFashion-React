@@ -8,35 +8,35 @@ const db = new sqlite3.Database(
 );
 
 /**
- * GET all products (admin)
- * URL: http://localhost:5000/admin/products
+ * GET /api/products/:slug
+ * Public product details
  */
-router.get('/', (req, res, next) => {
-  db.all(
-    'SELECT * FROM products ORDER BY name ASC',
-    [],
-    (err, products) => {
-      if (err) return next(err);
+router.get('/:slug', (req, res, next) => {
+  const slug = req.params.slug;
 
-      res.json({
-        products,
-        productCount: products.length
-      });
+  db.get(
+    'SELECT * FROM products WHERE slug = ?',
+    [slug],
+    (err, product) => {
+      if (err) return next(err);
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      db.all(
+        'SELECT * FROM products WHERE id != ? ORDER BY created_at DESC LIMIT 12',
+        [product.id],
+        (err, relatedProducts) => {
+          if (err) return next(err);
+
+          res.json({
+            product,
+            relatedProducts
+          });
+        }
+      );
     }
   );
-});
-
-/**
- * DELETE product (admin)
- * URL: http://localhost:5000/admin/products/:id
- */
-router.delete('/:id', (req, res, next) => {
-  const id = req.params.id;
-
-  db.run('DELETE FROM products WHERE id = ?', [id], function (err) {
-    if (err) return next(err);
-    res.json({ success: true });
-  });
 });
 
 module.exports = router;
