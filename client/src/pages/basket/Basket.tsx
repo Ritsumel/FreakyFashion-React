@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import BasketClient from './basket/BasketClient';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import BasketClient from './BasketClient';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 type BasketItem = {
   id: string;

@@ -11,7 +11,8 @@ const productsRouter = require('./routes/products');
 const basketRouter = require('./routes/basket');
 const checkoutRouter = require('./routes/checkout');
 const confirmationApiRouter = require('./routes/api/confirmation');
-
+const homeApiRouter = require('./routes/api/home');
+const searchApiRouter = require('./routes/api/search');
 
 const app = express();
 
@@ -51,6 +52,8 @@ app.use('/api/products', productsRouter);
 app.use('/api/basket', basketRouter);
 app.use('/api/checkout', checkoutRouter);
 app.use('/api/confirmation', confirmationApiRouter);
+app.use('/api/home', homeApiRouter);
+app.use('/api/search', searchApiRouter);
 
 /* ===== Start server ===== */
 const PORT = 5000;
