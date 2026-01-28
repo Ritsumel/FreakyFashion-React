@@ -1,0 +1,51 @@
+@use '../../shared' as *;
+
+#admin-product-details {
+    display: flex;
+
+    .content {
+        padding: 50px;
+        flex: 1;
+
+        .top-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            h3 {
+                font-size: 2rem;
+                font-weight: 600;
+            }
+
+            .buttons {
+                display: flex;
+                gap: 20px;
+            }
+        }
+
+        .bottom-container {
+
+            .info {
+                padding: 25px 0 0;
+                width: 70%;
+            }
+
+            h6 {
+                font-size: 1.5rem;
+                font-weight: 500;
+                padding-bottom: 15px;
+            }
+
+            p {
+                font-size: 1.5rem;
+            }
+
+            img {
+                width: 400px;
+                height: auto;
+                object-fit: cover;
+                padding: 15px 0 20px;
+            }
+        }
+    }    
+}

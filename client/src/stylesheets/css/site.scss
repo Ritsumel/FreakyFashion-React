@@ -1,3 +1,11 @@
+// new shared
+@use 'scss/shared' as *;
+
+// new app layers
+@use 'scss/admin';
+/* @use 'public'; */
+
+// legacy
 @import './scss/core';
 @import './scss/components';
-@import './scss/sections'; 
+@import './scss/sections';  
