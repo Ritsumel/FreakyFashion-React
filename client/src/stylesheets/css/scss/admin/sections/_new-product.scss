@@ -2,6 +2,7 @@
 
 #new-product {
     display: flex;
+    width: 100%;
 
     .content {
         padding: 50px;
@@ -12,8 +13,9 @@
             font-weight: 600;
         }
 
-        .name, .description, .image-url { width: 70%; }
-        .price, .sku { width: 30%; }
+        .description, .image-url, .brand { width: 70%; }
+        .name, .publication-date { width: 35%; }
+        .price, .sku { width: 20%; }
 
         .new-product-form {
             display: grid;
@@ -50,6 +52,28 @@
                     font-size: 1.5rem;
                     padding: 10px;
                 }
+
+                .date-input {
+                    display: flex;
+                    gap: 10px;
+
+                    input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+                        opacity: 0;
+                        cursor: pointer;
+                        position: absolute;
+                        right: 0;
+                      }
+
+                    .calendar-icon {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        
+                        i {
+                            font-size: 40px;
+                        }
+                    }
+                }
             }
 
             .checkbox {
@@ -64,15 +88,29 @@
                     font-weight: 500;
                 }
     
-                input {
+                input[type="checkbox"] {
+                    appearance: none;
                     width: 25px;
                     height: 25px;
                     position: relative;
-                    bottom: 3px;
                     border: 3px solid $border-theme;
+                    border-radius: 4px;
+                    background-color: white;
     
                     &:checked {
                         background-color: $border-theme;
+                    }
+
+                    &:checked::after {
+                        content: '';
+                        position: absolute;
+                        left: 6px;
+                        top: 2px;
+                        width: 7px;
+                        height: 12px;
+                        border: solid white;
+                        border-width: 0 3px 3px 0;
+                        transform: rotate(45deg);
                     }
                 }
             }

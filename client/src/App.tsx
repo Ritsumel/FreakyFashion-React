@@ -3,6 +3,7 @@ import AdminLayout from './layouts/AdminLayout';
 
 import AdminProducts from './pages/admin/AdminProducts';
 import NewProduct from './pages/admin/NewProduct';
+import AdminProductDetails from './pages/admin/AdminProductDetails';
 
 import ProductDetails from './pages/ProductDetails';
 import Basket from './pages/basket/Basket';
@@ -20,6 +21,7 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="products" element={<AdminProducts />} />
           <Route path="products/new" element={<NewProduct />} />
+          <Route path="/admin/products/:id" element={<AdminProductDetails />} />
         </Route>
 
         {/* PUBLIC */}

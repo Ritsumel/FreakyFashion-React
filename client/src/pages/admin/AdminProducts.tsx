@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import AdminSidebar from '../../components/admin/AdminSiderbar';
 
 type Product = {
   id: number;
@@ -13,6 +12,7 @@ type Product = {
 
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchProducts = async () => {
     const res = await fetch('http://localhost:5000/api/admin/products');
@@ -21,22 +21,30 @@ const AdminProducts = () => {
   };
 
   const deleteProduct = async (id: number) => {
-    if (!confirm('Är du säker?')) return;
+    if (!confirm('Är du säker på att du vill radera produkten?')) return;
 
     await fetch(`http://localhost:5000/api/admin/products/${id}`, {
       method: 'DELETE',
     });
 
     fetchProducts();
-  };
+      };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+      useEffect(() => {
+        fetchProducts();
+      }, []);
+
+      const filteredProducts = products.filter(product => {
+      const term = searchTerm.toLowerCase();
+
+      return (
+        product.name.toLowerCase().includes(term) ||
+        product.sku?.toLowerCase().includes(term)
+      );
+    });
 
   return (
     <section id="products-admin">
-      <AdminSidebar />
 
       <div className="products-view-all">
         {/* TOP BAR */}
@@ -47,8 +55,13 @@ const AdminProducts = () => {
               id="search-bar"
               type="text"
               placeholder="Sök produkt"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
             />
-            <button type="button" className="btn-search btn-theme">
+            <button
+              type="button"
+              className="btn-search btn-theme"
+            >
               Sök
             </button>
           </div>
@@ -64,9 +77,11 @@ const AdminProducts = () => {
           {/* NAMN */}
           <div className="product-details">
             <h6>Namn</h6>
-            {products.map((p, i) => (
+            {filteredProducts.map((p, i) => (
               <p key={p.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                {p.name}
+                <Link to={`/admin/products/${p.id}`}>
+                  {p.name}
+                </Link>
               </p>
             ))}
           </div>
@@ -74,7 +89,7 @@ const AdminProducts = () => {
           {/* SKU */}
           <div className="product-details">
             <h6>SKU</h6>
-            {products.map((p, i) => (
+            {filteredProducts.map((p, i) => (
               <p key={p.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
                 {p.sku || '—'}
               </p>
@@ -84,7 +99,7 @@ const AdminProducts = () => {
           {/* PUBLISERAD */}
           <div className="product-details">
             <h6>Publiserad</h6>
-            {products.map((p, i) => (
+            {filteredProducts.map((p, i) => (
               <p key={p.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
                 {p.publishDate ? 'Ja' : 'Nej'}
               </p>
@@ -94,7 +109,7 @@ const AdminProducts = () => {
           {/* PRIS */}
           <div className="product-details">
             <h6>Pris</h6>
-            {products.map((p, i) => (
+            {filteredProducts.map((p, i) => (
               <p key={p.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
                 {p.price} kr
               </p>
@@ -104,7 +119,7 @@ const AdminProducts = () => {
           {/* DELETE */}
           <div className="product-details">
             <h6>&nbsp;</h6>
-            {products.map((p, i) => (
+            {filteredProducts.map((p, i) => (
               <p key={p.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
                 <button
                   className="btn-delete"

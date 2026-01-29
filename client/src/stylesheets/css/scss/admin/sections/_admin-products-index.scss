@@ -2,6 +2,7 @@
 
 #products-admin {
     display: flex;
+    width: 100%;
 
     .products-view-all {
         flex: 1;
@@ -9,7 +10,7 @@
 
         .box1 {
             display: flex;
-            flex-grow: 1; 
+            flex-grow: 1;
             justify-content: space-between;
             padding-bottom: 30px;
 
