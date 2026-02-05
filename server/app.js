@@ -5,7 +5,6 @@ const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
 
-const adminRouter = require('./routes/admin/admin');
 const adminProductsRouter = require('./routes/admin/products');
 const productsRouter = require('./routes/products');
 const basketRouter = require('./routes/basket');
@@ -13,8 +12,11 @@ const checkoutRouter = require('./routes/checkout');
 const confirmationApiRouter = require('./routes/api/confirmation');
 const homeApiRouter = require('./routes/api/home');
 const searchApiRouter = require('./routes/api/search');
+const categoriesRouter = require('./routes/admin/categories');
 
 const app = express();
+
+app.set('etag', false);
 
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -46,7 +48,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/api/admin', adminRouter);
 app.use('/api/admin/products', adminProductsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/basket', basketRouter);
@@ -54,6 +55,7 @@ app.use('/api/checkout', checkoutRouter);
 app.use('/api/confirmation', confirmationApiRouter);
 app.use('/api/home', homeApiRouter);
 app.use('/api/search', searchApiRouter);
+app.use('/api/admin/categories', categoriesRouter);
 
 /* ===== Start server ===== */
 const PORT = 5000;

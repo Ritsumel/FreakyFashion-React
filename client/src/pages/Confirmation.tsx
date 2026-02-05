@@ -51,7 +51,7 @@ const Confirmation = () => {
       <main>
         <section id="confirmation">
 
-          {/* ===== TITLE / INTRO ===== */}
+          {/* TITLE / INTRO */}
           <div className="parent">
             <h1>Orderbekräftelse</h1>
             <h6>
@@ -60,10 +60,10 @@ const Confirmation = () => {
             </h6>
           </div>
 
-          {/* ===== ORDER DETAILS ===== */}
+          {/* ORDER DETAILS */}
           <div className="checkout-details">
 
-            {/* ===== MOBILE VIEW ===== */}
+            {/* MOBILE VIEW */}
             <div className="checkout-details-mobile-view">
               {data.basket.map((item, i) => (
                 <div key={i} className="checkout-single">
@@ -78,7 +78,7 @@ const Confirmation = () => {
               ))}
             </div>
 
-            {/* ===== DESKTOP VIEW ===== */}
+            {/* DESKTOP VIEW */}
             <div className="checkout-details-regular">
 
               <div className="product-details">

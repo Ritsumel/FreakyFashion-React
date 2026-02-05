@@ -4,6 +4,10 @@ import AdminLayout from './layouts/AdminLayout';
 import AdminProducts from './pages/admin/AdminProducts';
 import NewProduct from './pages/admin/NewProduct';
 import AdminProductDetails from './pages/admin/AdminProductDetails';
+import AdminCategories from './pages/admin/AdminCategories';
+import NewCategory from './pages/admin/NewCategory';
+import AdminCategoryDetails from './pages/admin/AdminCategoryDetails';
+import EditCategory from './pages/admin/EditCategory';
 
 import ProductDetails from './pages/ProductDetails';
 import Basket from './pages/basket/Basket';
@@ -22,6 +26,10 @@ function App() {
           <Route path="products" element={<AdminProducts />} />
           <Route path="products/new" element={<NewProduct />} />
           <Route path="/admin/products/:id" element={<AdminProductDetails />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/categories/new" element={<NewCategory />} />
+          <Route path="/admin/categories/:id" element={<AdminCategoryDetails />} />
+          <Route path="/admin/categories/:id/edit" element={<EditCategory />} />
         </Route>
 
         {/* PUBLIC */}

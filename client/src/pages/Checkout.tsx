@@ -15,7 +15,7 @@ const Checkout = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  /* ===== Fetch basket ===== */
+  /* Fetch basket */
   useEffect(() => {
     const fetchBasket = async () => {
       const res = await fetch('http://localhost:5000/api/basket', {
@@ -34,7 +34,7 @@ const Checkout = () => {
     fetchBasket();
   }, [navigate]);
 
-  /* ===== Update quantity ===== */
+  /* Update quantity */
   const handleQuantityChange = async (productId: string, newQty: number) => {
     const data = {
       productId: [productId],
@@ -54,7 +54,7 @@ const Checkout = () => {
     setBasket(json.basket);
   };
 
-  /* ===== Remove item ===== */
+  /* Remove item */
   const handleRemove = async (productId: string) => {
     await fetch(`http://localhost:5000/api/basket/${productId}`, {
       method: 'DELETE',
@@ -64,7 +64,7 @@ const Checkout = () => {
     setBasket(prev => prev.filter(item => item.id !== productId));
   };
 
-  /* ===== Submit order ===== */
+  /* Submit order */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -93,11 +93,11 @@ const Checkout = () => {
       <main>
         <section id="checkout">
 
-          {/* ===== CHECKOUT DETAILS ===== */}
+          {/* CHECKOUT DETAILS */}
           <div className="checkout-details">
             <h1>Kassan</h1>
 
-            {/* ===== MOBILE VIEW ===== */}
+            {/* MOBILE VIEW */}
             <div className="checkout-details-mobile-view">
               {basket.map(item => (
                 <div key={item.id} className="checkout-single">
@@ -151,7 +151,7 @@ const Checkout = () => {
               ))}
             </div>
 
-            {/* ===== DESKTOP VIEW ===== */}
+            {/* DESKTOP VIEW */}
             <div className="checkout-details-regular">
               <div className="product-details">
                 <h6>Produkt</h6>
@@ -221,7 +221,7 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* ===== CUSTOMER DETAILS ===== */}
+          {/* CUSTOMER DETAILS */}
           <div className="customer-details">
             <h1>Kunduppgifter</h1>
 

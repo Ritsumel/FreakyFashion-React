@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import SearchBar from '../../components/SearchBar';
 
 type Product = {
   id: number;
@@ -7,7 +8,7 @@ type Product = {
   slug: string;
   sku?: string;
   price: number;
-  publishDate: string | null;
+  publish_date: string | null;
 };
 
 const AdminProducts = () => {
@@ -49,22 +50,11 @@ const AdminProducts = () => {
       <div className="products-view-all">
         {/* TOP BAR */}
         <div className="box1">
-          <div className="search-field">
-            <i id="search-icon" className="fa-solid fa-magnifying-glass"></i>
-            <input
-              id="search-bar"
-              type="text"
-              placeholder="Sök produkt"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-            />
-            <button
-              type="button"
-              className="btn-search btn-theme"
-            >
-              Sök
-            </button>
-          </div>
+          <SearchBar
+            value={searchTerm}
+            placeholder="Sök produkt"
+            onChange={setSearchTerm}
+          />
 
           <Link to="/admin/products/new" className="btn-new btn-theme">
             Ny produkt
@@ -101,7 +91,7 @@ const AdminProducts = () => {
             <h6>Publiserad</h6>
             {filteredProducts.map((p, i) => (
               <p key={p.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                {p.publishDate ? 'Ja' : 'Nej'}
+                {p.publish_date ? 'Ja' : 'Nej'}
               </p>
             ))}
           </div>

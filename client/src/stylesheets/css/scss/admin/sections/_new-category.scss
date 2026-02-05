@@ -2,6 +2,7 @@
 
 #new-category {
     display: flex;
+    width: 100%;
 
     .content {
         padding: 50px;
@@ -80,7 +81,7 @@
 
                     .categories-view {
                         display: grid; 
-                        grid-template-columns: 1.5fr 1fr;
+                        grid-template-columns: 1fr 1fr 0.1fr;
                         align-self: flex-start;
                         width: 100%;
                         border-radius: 20px;
@@ -97,8 +98,19 @@
                                 display: flex;
                                 align-items: center;
                             }
+
+                            button {
+                                color: $dark-blue;
+                                pointer-events: none;
+                                text-decoration: none;
+                                border: none;
+                            }
+
+                            i {
+                                pointer-events: auto;
+                            }
                 
-                            p {
+                            p, button {
                                 font-size: 1.5em;
                                 background-color: white;
                                 margin: 0;
@@ -106,8 +118,10 @@
                                 height: 40px;
                                 display: flex;
                                 align-items: center;
+                                width: 100%;
 
-                                & + p {
+                                & + p,
+                                & + button {
                                     border-top: 2px solid $secondary-blue;
                                 }
 

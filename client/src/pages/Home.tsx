@@ -30,7 +30,7 @@ const Home = () => {
     const fetchHome = async () => {
       try {
         const res = await fetch('http://localhost:5000/api/home', {
-          cache: 'no-store', // 🔑 fixes 304 issue
+          cache: 'no-store',
         });
 
         if (!res.ok) {
@@ -46,7 +46,7 @@ const Home = () => {
       } catch (err) {
         console.error('Home fetch failed:', err);
       } finally {
-        setLoading(false); // 🔑 ALWAYS exit loading
+        setLoading(false);
       }
     };
 

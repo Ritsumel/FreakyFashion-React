@@ -18,7 +18,7 @@ const NewProduct = () => {
     e.preventDefault();
     setError(null);
 
-    // SKU validation (same rule as old project)
+    /* SKU validation */
     const skuPattern = /^[A-Z]{3}[0-9]{3}$/;
     if (!skuPattern.test(sku)) {
       setError('SKU måste vara i formatet ABC123');
@@ -28,13 +28,11 @@ const NewProduct = () => {
     const payload = {
       name,
       description,
-      image_url: imageUrl,
+      image: imageUrl || null,
       brand,
       sku,
       price: price ? Number(price) : null,
-      publishDate: publish
-        ? publishDate || new Date().toISOString()
-        : null
+      publish
     };
 
     try {
@@ -49,7 +47,8 @@ const NewProduct = () => {
         throw new Error(data.error || 'Kunde inte skapa produkt');
       }
 
-      navigate('/admin/products');
+      const data = await res.json();
+      navigate(`/admin/products/${data.productId}`);
     } catch (err: any) {
       setError(err.message);
     }

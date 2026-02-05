@@ -18,7 +18,7 @@ const BasketClient = ({ initialBasket }: Props) => {
   const [basket, setBasket] = useState<BasketItem[]>(initialBasket);
   const navigate = useNavigate();
 
-  /* ===== Update quantity ===== */
+  /* Update quantity */
   const handleQuantityChange = async (productId: string, newQty: number) => {
     const data = {
       productId: [productId],
@@ -46,7 +46,7 @@ const BasketClient = ({ initialBasket }: Props) => {
     }
   };
 
-  /* ===== Remove item ===== */
+  /* Remove item */
   const handleRemove = async (productId: string) => {
     try {
       await fetch(`http://localhost:5000/api/basket/${productId}`, {
@@ -67,7 +67,7 @@ const BasketClient = ({ initialBasket }: Props) => {
         <div className="basket-details">
           <h1>Varukorgen</h1>
 
-          {/* ===== MOBILE VIEW ===== */}
+          {/* MOBILE VIEW */}
           <div className="basket-details-mobile-view">
             {basket.map(item => (
               <div key={item.id} className="basket-single">
@@ -118,7 +118,7 @@ const BasketClient = ({ initialBasket }: Props) => {
             ))}
           </div>
 
-          {/* ===== DESKTOP VIEW ===== */}
+          {/* DESKTOP VIEW */}
           <div className="basket-details-regular">
 
             {/* Produkt */}
