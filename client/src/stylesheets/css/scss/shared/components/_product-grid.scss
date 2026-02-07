@@ -1,3 +1,5 @@
+@use '../core' as *;
+
 .product-grid {
     display: grid;
     gap: 0.5rem 2rem;
@@ -16,6 +18,8 @@
 
         &-image {
             position: relative;
+            aspect-ratio: 3 / 4;
+            font-size: clamp(10px, 1.1cqw, 16px);
 
             img {
                 display: block;
@@ -28,47 +32,46 @@
                 left: 0.9em;
                 height: 3.3em;
                 width: 6.8em;
-                border-radius: 10px;
-                background-color: black;
-
-                @include sm {
-                    top: 0.9em;
-                    left: 0.9em;
-                    height: 2.5em;
-                    width: 4.6em;
-                    border-radius: 6px;
-                }
+                border-radius: 0.6em;
+                background-color: $dark-blue;
                 
                 p {
                     color: white;
-                    margin-left: 1.5em;
-                    margin-top: 0.9em;
+                    margin-left: 1.3em;
+                    margin-top: 0.7em; 
                     font-size: 1.2em;
-
-                    @include sm {
-                        margin-left: 1.4em;
-                        margin-top: 0.8em;
-                        font-size: 0.8em;
-                    }
                 }
             }
 
             .bookmark-tag {
                 position: absolute;
-                bottom: 20px;
-                right: 15px;
-                font-size: 60px;
+                bottom: 0.2em;
+                right: 0.4em;
+                font-size: 3em;
                 border: none;
-                background-color: transparent;
-                color: $dark-peach;
+                background-color: transparent; 
+                color: $logo-blue;
+                cursor: pointer;
 
-                @include sm {
-                    bottom: 15px;
-                    right: 8px;
-                    font-size: 50px;
+                transition: transform 0.2s ease, color 0.2s ease;
+
+                &:hover {
+                    color: $logo-blue;
+                    transform: scale(1.1);
                 }
 
-                @include lg { font-size: 40px; }
+                &:hover i {
+                    font-family: "Font Awesome 6 Free";
+                    font-weight: 900; // switches to solid
+                }
+
+                &.is-active {
+                    color: $logo-blue;
+
+                    i {
+                        font-weight: 900;
+                    }
+                }
             }
         }
 
@@ -81,11 +84,11 @@
                 padding-top: 20px
             }
 
-            h4 { color: black; @include text-xs; }
+            h4 { color: $text-dark; font-size: 1.5rem }
 
             p {
-                @include text-xxs;
-                color: rgba(0, 0, 0, 0.622);
+                font-size: 1rem;
+                color: $text-dark;
                 padding-top: 5px;
             }
         }

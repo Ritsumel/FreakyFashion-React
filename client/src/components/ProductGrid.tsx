@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
 import type { Product } from '../types/Product';
+import { useBookmarks } from '../context/BookmarkContext';
 
 type Props = {
   products: Product[];
 };
 
 const ProductGrid = ({ products }: Props) => {
+  const { bookmarked, toggleBookmark } = useBookmarks();
+  
   return (
     <div className="product-grid">
       {products.map(product => (
@@ -13,7 +16,7 @@ const ProductGrid = ({ products }: Props) => {
           <div className="product-card">
             <div className="product-card-image">
               <img
-                src={product.image}
+                src={product.image || '/images/freakyfashion-placeholder.png'}
                 alt={product.alt}
               />
 
@@ -23,7 +26,17 @@ const ProductGrid = ({ products }: Props) => {
                 </div>
               )}
 
-              <button className="bookmark-tag">
+              <button
+                type="button"
+                className={`bookmark-tag ${
+                  bookmarked.has(product.id) ? 'is-active' : ''
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleBookmark(product.id);
+                }}
+              >
                 <i className="fa-regular fa-heart"></i>
               </button>
             </div>

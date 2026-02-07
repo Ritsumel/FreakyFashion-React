@@ -1,0 +1,22 @@
+@use '../../shared' as *;
+
+.favorites {
+    padding: 25px;
+
+    @include lg { padding: 25px 50px; }
+
+    h1 { 
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    .p1 {
+        font-size: 1.5rem;
+        text-align: center;
+
+        i {
+            font-size: 1.5rem;
+            color: $dark-blue;
+        }
+    }
+}

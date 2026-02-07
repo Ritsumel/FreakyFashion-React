@@ -158,59 +158,62 @@ router.post('/', (req, res, next) => {
 
   db.run(
     insertQuery,
-    [name, description, brand, image || null, sku, price, now, publishDate, alt],
+    [
+      name,
+      description || null,
+      brand || null,
+      image || null,
+      sku,
+      price,
+      now,
+      publishDate,
+      alt
+    ],
     function (err) {
       if (err) return next(err);
 
       const productId = this.lastID;
       const slug = `${slugify(name)}-${productId}`;
 
-      // Update slug
       db.run(
         'UPDATE products SET slug = ? WHERE id = ?',
         [slug, productId],
         err2 => {
           if (err2) return next(err2);
 
-          // Fetch all categories
-          db.all(
-            'SELECT id, name FROM categories',
-            [],
-            (err3, categories) => {
-              if (err3) return next(err3);
+          db.all('SELECT id, name FROM categories', [], (err3, categories) => {
+            if (err3) return next(err3);
 
-              // Match categories
-              const matched = matchCategories(
-                `${name} ${description || ''} ${brand || ''}`,
-                categories,
-                normalize
-              );
+            const matched = matchCategories(
+              `${name} ${description || ''} ${brand || ''}`,
+              categories,
+              normalize
+            );
 
-              // No matches? Done.
-              if (!matched.length) {
-                res.status(201).json({
-                  success: true,
-                  productId
-                });
-              }
-
-              // Insert relations
-              const stmt = db.prepare(
-                'INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)'
-              );
-
-              matched.forEach(cat => {
-                stmt.run(productId, cat.id);
-              });
-
-              stmt.finalize(() => {
-                res.status(201).json({
-                  success: true,
-                  productId
-                });
+            if (!matched.length) {
+              return res.status(201).json({
+                success: true,
+                productId,
+                slug
               });
             }
-          );
+
+            const stmt = db.prepare(
+              'INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)'
+            );
+
+            matched.forEach(cat => {
+              stmt.run(productId, cat.id);
+            });
+
+            stmt.finalize(() => {
+              res.status(201).json({
+                success: true,
+                productId,
+                slug
+              });
+            });
+          });
         }
       );
     }

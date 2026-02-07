@@ -14,7 +14,7 @@ const Spots = ({ spots }: Props) => {
       {spots.map((spot, i) => (
         <a href="/" className="spot" key={i}>
           <img src={`/images/${spot.image}`} alt={spot.alt} />
-          <h1>{spot.title}</h1>
+          <h1>{/* {spot.title} */}</h1>
         </a>
       ))}
     </div>

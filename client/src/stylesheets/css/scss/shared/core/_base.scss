@@ -1,7 +1,9 @@
 @use './color' as *;
 
-// 100-900
+// Montserrat 100-900
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+// Bungee Inline 400
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Inline&display=swap');
 
 html, body {
     background-color: $bg-light;

@@ -1,8 +1,10 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useBasket } from '../../context/BasketContext';
 
-type BasketItem = {
+export type BasketItem = {
   id: string;
+  slug: string;
   name: string;
   price: number;
   quantity: number;
@@ -11,54 +13,19 @@ type BasketItem = {
 };
 
 type Props = {
-  initialBasket: BasketItem[];
+  basket: BasketItem[];
 };
 
-const BasketClient = ({ initialBasket }: Props) => {
-  const [basket, setBasket] = useState<BasketItem[]>(initialBasket);
+const BasketClient = ({ basket }: Props) => {
   const navigate = useNavigate();
+  const { updateQuantity, removeFromBasket } = useBasket();
 
-  /* Update quantity */
-  const handleQuantityChange = async (productId: string, newQty: number) => {
-    const data = {
-      productId: [productId],
-      quantity: [newQty],
-    };
-
-    try {
-      const res = await fetch('http://localhost:5000/api/basket/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) {
-        alert('Kunde inte uppdatera varukorgen.');
-        return;
-      }
-
-      const json = await res.json();
-      setBasket(json.basket);
-    } catch (err) {
-      console.error(err);
-      alert('Något gick fel.');
-    }
+  const handleQuantityChange = (productId: string, newQty: number) => {
+    updateQuantity(productId, newQty);
   };
 
-  /* Remove item */
-  const handleRemove = async (productId: string) => {
-    try {
-      await fetch(`http://localhost:5000/api/basket/${productId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      });
-
-      setBasket(prev => prev.filter(item => item.id !== productId));
-    } catch (err) {
-      console.error(err);
-      alert('Kunde inte ta bort produkten.');
-    }
+  const handleRemove = (productId: string) => {
+    removeFromBasket(productId);
   };
 
   return (
@@ -72,21 +39,18 @@ const BasketClient = ({ initialBasket }: Props) => {
             {basket.map(item => (
               <div key={item.id} className="basket-single">
                 <div className="total">
-
                   <div className="total-header">
                     <h6>
-                      {item.quantity} x {item.name}
+                      {item.quantity} x{' '}
+                      <Link to={`/products/${item.slug}`}>
+                        {item.name}
+                      </Link>
                     </h6>
                     <p>{item.price} SEK</p>
                   </div>
 
                   <div className="total-footer">
-                    <h6>
-                      <span className="price-output">
-                        {item.price * item.quantity}
-                      </span>{' '}
-                      SEK
-                    </h6>
+                    <h6>{item.price * item.quantity} SEK</h6>
 
                     <div className="amount">
                       <select
@@ -97,78 +61,58 @@ const BasketClient = ({ initialBasket }: Props) => {
                         }
                       >
                         {Array.from({ length: 10 }, (_, i) => i + 1).map(qty => (
-                          <option key={qty} value={qty}>
-                            {qty}
-                          </option>
+                          <option key={qty} value={qty}>{qty}</option>
                         ))}
                       </select>
 
                       <button
                         type="button"
-                        className="remove-item"
+                        className="btn-delete"
                         onClick={() => handleRemove(item.id)}
                       >
                         <i className="fa-solid fa-trash-can"></i>
                       </button>
                     </div>
                   </div>
-
                 </div>
               </div>
             ))}
           </div>
 
           {/* DESKTOP VIEW */}
-          <div className="basket-details-regular">
-
-            {/* Produkt */}
+          <div className="basket-details-regular products-view">
             <div className="product-details">
               <h6>Produkt</h6>
-              {basket.map((item, i) => (
-                <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                  {item.name}
+              {basket.map(item => (
+                <p key={item.id}>
+                  <Link to={`/products/${item.slug}`}>
+                    {item.name}
+                  </Link>
                 </p>
               ))}
             </div>
 
-            {/* Antal */}
             <div className="product-details">
               <h6>Antal</h6>
-              {basket.map((item, i) => (
-                <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                  {item.quantity}
-                </p>
-              ))}
+              {basket.map(item => <p key={item.id}>{item.quantity}</p>)}
             </div>
 
-            {/* Pris */}
             <div className="product-details">
               <h6>Pris</h6>
-              {basket.map((item, i) => (
-                <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                  {item.price} SEK
-                </p>
-              ))}
+              {basket.map(item => <p key={item.id}>{item.price} SEK</p>)}
             </div>
 
-            {/* Totalt */}
             <div className="product-details">
               <h6>Totalt</h6>
-              {basket.map((item, i) => (
-                <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                  {item.price * item.quantity} SEK
-                </p>
+              {basket.map(item => (
+                <p key={item.id}>{item.price * item.quantity} SEK</p>
               ))}
             </div>
 
-            {/* Actions */}
             <div className="product-details">
               <h6>&nbsp;</h6>
-              {basket.map((item, i) => (
-                <div
-                  key={item.id}
-                  className={`amount ${i % 2 === 0 ? 'amount1' : 'amount2'}`}
-                >
+              {basket.map(item => (
+                <p key={item.id}>
                   <select
                     className="form-select"
                     value={item.quantity}
@@ -182,13 +126,12 @@ const BasketClient = ({ initialBasket }: Props) => {
                   </select>
 
                   <button
-                    type="button"
-                    className="remove-item"
+                    className="btn-delete"
                     onClick={() => handleRemove(item.id)}
                   >
                     <i className="fa-solid fa-trash-can"></i>
                   </button>
-                </div>
+                </p>
               ))}
             </div>
           </div>
@@ -196,7 +139,7 @@ const BasketClient = ({ initialBasket }: Props) => {
           <div className="button-submit">
             <button
               type="button"
-              className="btn-soft-glow"
+              className="btn-theme"
               onClick={() => navigate('/checkout')}
             >
               Till kassan

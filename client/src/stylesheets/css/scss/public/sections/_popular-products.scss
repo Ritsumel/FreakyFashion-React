@@ -1,0 +1,7 @@
+@use '../../shared' as *;
+
+#popular-products {
+    padding: 25px;
+
+    @include lg { padding: 25px 50px; }
+}

@@ -1,0 +1,153 @@
+@use '../../shared' as *;
+
+header {
+    padding: 25px;
+
+    .parent {
+
+        @include sm {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+        }
+
+        .box1 {
+            display: flex;
+            padding-top: 15px;
+
+            @include sm { flex-grow: 1; justify-content: space-between; align-items: center; padding-top: 80px; }
+
+            .icons {
+                display: flex;
+                align-items: center;
+                
+                .fa-solid {
+                    margin-left: 20px;
+                    color: $dark-blue;
+                    font-size: 44px;
+
+                    @include sm { font-size: 45px; margin-left: 25px; }
+                }
+
+                .cart-icon {
+                    position: relative;
+                    display: inline-flex;
+                    align-items: center;
+                    text-decoration: none;
+                }
+
+                .cart-badge {
+                    position: absolute;
+                    top: -6px;
+                    right: -8px;
+                    min-width: 26px;
+                    height: 26px;
+                    padding: 0 6px;
+
+                    background-color: $dark-blue;
+                    color: white;
+                    border-radius: 999px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border: 2px solid $bg-light;
+
+                    transform: scale(1); // IMPORTANT
+
+                    &.pop {
+                        animation: cart-pop 0.35s ease-out;
+                    }
+                }
+
+                @keyframes cart-pop {
+                0% { transform: scale(1); }
+                40% { transform: scale(1.4); }
+                100% { transform: scale(1); }
+                }
+
+                @keyframes pop {
+                    0% {
+                        transform: scale(1);
+                    }
+                    40% {
+                        transform: scale(1.4);
+                    }
+                    100% {
+                        transform: scale(1);
+                    }
+                }
+            }
+        }
+
+        .search-field {
+            max-width: 500px;
+        }
+
+        #logo {
+            display: inline-block;
+
+            @include sm { max-width: 390px; flex-grow: 1; }
+            @include lg { max-width: 370px; }
+
+            img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+
+    .menu {
+        padding-top: 30px;
+
+        @include sm { padding-top: 40px; }
+        @include lg { padding-top: 30px; }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+
+            @include sm {
+                flex-direction: row;
+            }
+
+            a {
+                display: block;
+                text-decoration: none;
+                color: $dark-blue !important;
+                font-size: 1.5rem;
+                font-weight: 500;
+
+                @include sm { margin-right: 15px; }
+                @include lg { font-size: 1.4rem; }
+
+                @include sm {  
+                    // Hover underline animation from center
+                    position: relative;
+                    overflow: hidden;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 50%;
+                        width: 0;
+                        height: 2px;
+                        background-color: $dark-blue;
+                        transition: width 0.4s ease, left 0.4s ease;
+                    }
+
+                    &:hover::after {
+                        width: 100%;
+                        left: 0;
+                    }
+                }
+            }
+        }
+    }
+}

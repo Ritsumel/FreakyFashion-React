@@ -30,8 +30,9 @@ router.get('/', (req, res, next) => {
           ELSE 0 
         END AS showNewTag
         FROM products
-        WHERE datetime(created_at) <= datetime('now')
-        ORDER BY datetime(created_at) DESC
+        WHERE publish_date IS NOT NULL
+        AND datetime(publish_date) <= datetime('now')
+        ORDER BY datetime(publish_date) DESC
         LIMIT 8
         `,
         [sevenDaysAgo.toISOString()],

@@ -1,68 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
-type BasketItem = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-};
+import { useBasket } from '../context/BasketContext';
 
 const Checkout = () => {
-  const [basket, setBasket] = useState<BasketItem[]>([]);
+  const { basket, updateQuantity, removeFromBasket } = useBasket();
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  /* Fetch basket */
-  useEffect(() => {
-    const fetchBasket = async () => {
-      const res = await fetch('http://localhost:5000/api/basket', {
-        credentials: 'include',
-      });
-
-      if (!res.ok) {
-        navigate('/basket');
-        return;
-      }
-
-      const data = await res.json();
-      setBasket(data.basket);
-    };
-
-    fetchBasket();
-  }, [navigate]);
-
-  /* Update quantity */
-  const handleQuantityChange = async (productId: string, newQty: number) => {
-    const data = {
-      productId: [productId],
-      quantity: [newQty],
-    };
-
-    const res = await fetch('http://localhost:5000/api/basket/update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) return;
-
-    const json = await res.json();
-    setBasket(json.basket);
-  };
-
-  /* Remove item */
-  const handleRemove = async (productId: string) => {
-    await fetch(`http://localhost:5000/api/basket/${productId}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-
-    setBasket(prev => prev.filter(item => item.id !== productId));
-  };
 
   /* Submit order */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -104,7 +49,12 @@ const Checkout = () => {
                   <div className="total">
 
                     <div className="total-header">
-                      <h6>{item.quantity} x {item.name}</h6>
+                      <h6>
+                        {item.quantity} x{' '}
+                        <Link to={`/products/${item.slug}`} className="product-link">
+                          {item.name}
+                        </Link>
+                      </h6>
                       <p>{item.price} SEK</p>
                     </div>
 
@@ -121,25 +71,20 @@ const Checkout = () => {
                           className="form-select quantity-select"
                           value={item.quantity}
                           onChange={e =>
-                            handleQuantityChange(
-                              item.id,
-                              Number(e.target.value)
-                            )
+                            updateQuantity(item.id, Number(e.target.value))
                           }
                         >
-                          {Array.from({ length: 10 }, (_, i) => i + 1).map(
-                            qty => (
-                              <option key={qty} value={qty}>
-                                {qty}
-                              </option>
-                            )
-                          )}
+                          {Array.from({ length: 10 }, (_, i) => i + 1).map(qty => (
+                            <option key={qty} value={qty}>
+                              {qty}
+                            </option>
+                          ))}
                         </select>
 
                         <button
                           type="button"
-                          className="remove-item"
-                          onClick={() => handleRemove(item.id)}
+                          className="btn-delete"
+                          onClick={() => removeFromBasket(item.id)}
                         >
                           <i className="fa-solid fa-trash-can"></i>
                         </button>
@@ -152,72 +97,73 @@ const Checkout = () => {
             </div>
 
             {/* DESKTOP VIEW */}
-            <div className="checkout-details-regular">
+            <div className="checkout-details-regular products-view">
+
+              {/* PRODUKT */}
               <div className="product-details">
                 <h6>Produkt</h6>
-                {basket.map((item, i) => (
-                  <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                    {item.name}
+                {basket.map(item => (
+                  <p key={item.id}>
+                    <Link to={`/products/${item.slug}`} className="product-link">
+                      {item.name}
+                    </Link>
                   </p>
                 ))}
-                <p className={`spacer-row ${basket.length % 2 === 0 ? 'p1' : 'p2'}`}>&nbsp;</p>
               </div>
 
+              {/* ANTAL */}
+              <div className="product-details">
+                <h6>Antal</h6>
+                {basket.map(item => (
+                  <p key={item.id}>{item.quantity}</p>
+                ))}
+              </div>
+
+              {/* PRIS */}
               <div className="product-details">
                 <h6>Pris</h6>
-                {basket.map((item, i) => (
-                  <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                    {item.price} SEK
-                  </p>
+                {basket.map(item => (
+                  <p key={item.id}>{item.price} SEK</p>
                 ))}
-                <p className={`spacer-row ${basket.length % 2 === 0 ? 'p1' : 'p2'}`}>&nbsp;</p>
               </div>
 
+              {/* TOTALT */}
               <div className="product-details">
                 <h6>Totalt</h6>
-                {basket.map((item, i) => (
-                  <p key={item.id} className={i % 2 === 0 ? 'p1' : 'p2'}>
+                {basket.map(item => (
+                  <p key={item.id}>
                     {item.price * item.quantity} SEK
                   </p>
                 ))}
-                <p className={`spacer-row ${basket.length % 2 === 0 ? 'p1' : 'p2'}`}>&nbsp;</p>
               </div>
 
+              {/* ACTIONS */}
               <div className="product-details">
-                <h6>Antal</h6>
-                {basket.map((item, i) => (
-                  <div
-                    key={item.id}
-                    className={`amount ${i % 2 === 0 ? 'amount1' : 'amount2'}`}
-                  >
+                <h6>&nbsp;</h6>
+                {basket.map(item => (
+                  <p key={item.id}>
                     <select
                       className="form-select"
                       value={item.quantity}
                       onChange={e =>
-                        handleQuantityChange(
-                          item.id,
-                          Number(e.target.value)
-                        )
+                        updateQuantity(item.id, Number(e.target.value))
                       }
                     >
                       {Array.from({ length: 10 }, (_, i) => i + 1).map(qty => (
-                        <option key={qty} value={qty}>
-                          {qty}
-                        </option>
+                        <option key={qty} value={qty}>{qty}</option>
                       ))}
                     </select>
 
                     <button
-                      type="button"
-                      className="remove-item"
-                      onClick={() => handleRemove(item.id)}
+                      className="btn-delete"
+                      onClick={() => removeFromBasket(item.id)}
                     >
                       <i className="fa-solid fa-trash-can"></i>
                     </button>
-                  </div>
+                  </p>
                 ))}
-                <p className={`spacer-row ${basket.length % 2 === 0 ? 'p1' : 'p2'}`}>&nbsp;</p>
               </div>
+
             </div>
           </div>
 
@@ -265,14 +211,18 @@ const Checkout = () => {
               </div>
 
               <div className="form-check">
-                <label>
-                  <input type="checkbox" name="newsletter" />
+                <input
+                  type="checkbox"
+                  id="newsletter"
+                  name="newsletter"
+                />
+                <label htmlFor="newsletter">
                   Jag vill ta emot nyhetsbrev
                 </label>
               </div>
 
               <div className="button-box">
-                <button className="btn-soft-glow">Köp</button>
+                <button className="btn-theme">Köp</button>
               </div>
             </form>
           </div>

@@ -163,7 +163,7 @@ router.post('/', (req, res, next) => {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 
-  // 1️⃣ Insert category
+  // Insert category
   db.run(
     `INSERT INTO categories (name, slug, image_url)
      VALUES (?, ?, ?)`,
@@ -173,12 +173,12 @@ router.post('/', (req, res, next) => {
 
       const categoryId = this.lastID;
 
-      // 2️⃣ No products? Done.
+      // No products? Done.
       if (!productIds.length) {
         return res.status(201).json({ success: true });
       }
 
-      // 3️⃣ Insert product relations
+      // Insert product relations
       const values = productIds.map(pid => [pid, categoryId]);
 
       const placeholders = values.map(() => '(?, ?)').join(',');

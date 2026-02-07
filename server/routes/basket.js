@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 
 /* ===== POST /api/basket/add ===== */
 router.post('/add', (req, res) => {
-  const { id, name, price, image, brand } = req.body;
+  const { id, slug, name, price, image, brand } = req.body;
   const itemId = String(id);
 
   const cleanPrice =
@@ -35,6 +35,7 @@ router.post('/add', (req, res) => {
   } else {
     req.session.basket.push({
       id: itemId,
+      slug,
       name,
       price: cleanPrice,
       image,

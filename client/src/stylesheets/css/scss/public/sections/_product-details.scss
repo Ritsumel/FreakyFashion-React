@@ -1,5 +1,9 @@
+@use '../../shared' as *;
+
 #product-details {
-    padding: 30px 30px 40px 30px;
+    padding: 25px;
+
+    @include lg { padding: 25px 50px; }
 
     .parent {
 
@@ -13,22 +17,43 @@
 
         .details-card-image {
             position: relative;
+            aspect-ratio: 3 / 4;
 
             img {
-                display: block;
                 width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
 
             .bookmark-tag {
                 position: absolute;
-                bottom: 20px;
-                right: 15px;
-                font-size: 60px;
+                bottom: 0.2em;
+                right: 0.4em;
+                font-size: 3em;
                 border: none;
-                background-color: transparent;
-                color: $dark-peach;
+                background-color: transparent; 
+                color: $logo-blue;
+                cursor: pointer;
 
-                @include sm { display: none; }
+                transition: transform 0.2s ease, color 0.2s ease;
+
+                &:hover {
+                    color: $logo-blue;
+                    transform: scale(1.1);
+                }
+
+                &:hover i {
+                    font-family: "Font Awesome 6 Free";
+                    font-weight: 900; // switches to solid
+                }
+
+                &.is-active {
+                    color: $logo-blue;
+
+                    i {
+                        font-weight: 900;
+                    }
+                }
             }
         }
 
@@ -38,44 +63,37 @@
             @include sm { padding: 0; }
 
             h2 {
-                @include title-m;
+                font-size: 2rem;
+                color: $text-dark;
 
-                @include sm { @include title-s; }
+                @include sm { font-size: 2rem; }
+                @include lg { font-size: 2.5rem; }
             }
 
             h6 {
-                @include text-s; 
-                color: rgba(0, 0, 0, 0.603);
+                font-size: 1.5rem; 
                 padding-top: 5px;
-
-                @include sm { 
-                    @include text-xss;
-                    color: rgba(0, 0, 0, 0.603);
-                }
             }
 
             .text-box {
-                @include text-s;
+                font-size: 1.5rem;
                 padding-top: 15px;
 
-                @include sm { @include text-xs; }
                 @include lg { padding-right: 40%; }
             }
 
             .price {
-                @include text-s;
+                font-size: 1.5rem;
                 padding-top: 20px;
                 padding-bottom: 20px;
 
                 @include sm { padding-bottom: 10px; }
             }
 
-            .btn-soft-glow {
-                @include text-s;
+            .btn-theme { 
                 width: 100%;
-                height: 65px;
 
-                @include sm { width: 240px; @include text-xs; }
+                @include sm { width: auto; }
             }
         }
     }
@@ -85,7 +103,7 @@
 
         h1 {
             display: none;
-            @include title-m;
+            font-size: 2rem;
             text-align: center;
             padding-top: 80px;
 
@@ -121,12 +139,19 @@
                 transform: scale(1.02);
             }
 
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                aspect-ratio: 3 / 4;
+            }
+
             &-footer {
 
                 .upper-text {
                     display: flex;
                     justify-content: space-between;
-                    font-size: 1em;
+                    font-size: 1rem;
                     padding-top: 20px;
                     gap: 5%;
                 }
@@ -136,16 +161,17 @@
                 }
     
                 h4 {
-                    color: black;
+                    color: $text-dark;
                     word-break: break-word;
-                    @include text-xsss;
+                    font-size: 0.5rem;
+                    font-size: 1rem;
 
-                    @include lg { @include text-xs; }
+                    @include lg { font-size: 1.5rem; }
                 }
     
                 p {
-                    @include text-xxs;
-                    color: rgba(0, 0, 0, 0.622);
+                    font-size: 1rem;
+                    color: $text-dark;
                     padding-top: 5px;
                 }
             }
@@ -161,10 +187,14 @@
 
             &.carousel-control-prev {
                 left: -2.5rem;
+                transform: scale(1.4);
+                filter: invert(32%) sepia(23%) saturate(2800%) hue-rotate(200deg) brightness(90%) contrast(95%);
             }
 
             &.carousel-control-next {
                 right: -2.5rem;
+                transform: scale(1.4);
+                filter: invert(32%) sepia(23%) saturate(2800%) hue-rotate(200deg) brightness(90%) contrast(95%);
             }
         }
     }

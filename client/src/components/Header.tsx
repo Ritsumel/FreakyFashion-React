@@ -1,10 +1,29 @@
+import { Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useBasket } from '../context/BasketContext';
+
 const Header = () => {
+  const { count, popSignal } = useBasket();
+  const [animate, setAnimate] = useState(false);
+  const lastPopSignal = useRef(popSignal);
+
+  useEffect(() => {
+    if (popSignal > lastPopSignal.current) {
+      setAnimate(true);
+      const t = setTimeout(() => setAnimate(false), 350);
+      lastPopSignal.current = popSignal;
+      return () => clearTimeout(t);
+    }
+
+    lastPopSignal.current = popSignal;
+  }, [popSignal]);
+
   return (
     <header>
       <div className="parent">
         <a href="/" id="logo">
           <img
-            src="/images/freaky-fashion-logo.png"
+            src="/images/logo2.png"
             alt="Freaky Fashion logotyp"
           />
         </a>
@@ -22,8 +41,18 @@ const Header = () => {
           </form>
 
           <div className="icons">
-            <a href="/"><i className="fa-solid fa-heart"></i></a>
-            <a href="/basket"><i className="fa-solid fa-basket-shopping"></i></a>
+            <Link to="/favorites">
+              <i className="fa-solid fa-heart"></i>
+            </Link>
+            <Link to="/basket" className="cart-icon">
+              <i className="fa-solid fa-basket-shopping"></i>
+
+              {count > 0 && (
+                <span className={`cart-badge ${animate ? 'pop' : ''}`}>
+                  {count}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
       </div>

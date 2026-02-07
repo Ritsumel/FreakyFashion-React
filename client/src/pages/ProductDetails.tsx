@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useBookmarks } from '../context/BookmarkContext';
+import { useBasket } from '../context/BasketContext';
 
 interface Product {
   id: number;
@@ -9,39 +11,33 @@ interface Product {
   brand: string;
   description: string;
   price: number;
-  image: string; // URL
+  image: string;
   alt: string;
   slug: string;
 }
 
 const ProductDetails = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { bookmarked, toggleBookmark } = useBookmarks();
+  const { addToBasket } = useBasket();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // use BasketContext instead of fetch
   const handleAddToCart = async () => {
     if (!product) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/basket/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          brand: product.brand,
-        }),
+      await addToBasket({
+        id: product.id,
+        slug: product.slug,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        brand: product.brand,
       });
-
-      if (!res.ok) {
-        throw new Error('Failed to add to basket');
-      }
-
     } catch (err) {
       console.error(err);
       alert('Kunde inte lägga till i varukorgen');
@@ -99,7 +95,6 @@ const ProductDetails = () => {
   }
 
   const chunkedProducts: Product[][] = [];
-
   for (let i = 0; i < relatedProducts.length; i += 3) {
     chunkedProducts.push(relatedProducts.slice(i, i + 3));
   }
@@ -112,8 +107,21 @@ const ProductDetails = () => {
         <section id="product-details">
           <div className="parent">
             <div className="details-card-image">
-              <img src={product.image} alt={product.alt} />
-              <button className="bookmark-tag">
+              <img
+                src={product.image || '/images/freakyfashion-placeholder.png'}
+                alt={product.alt}
+              />
+              <button
+                type="button"
+                className={`bookmark-tag ${
+                  bookmarked.has(product.id) ? 'is-active' : ''
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleBookmark(product.id);
+                }}
+              >
                 <i className="fa-regular fa-heart"></i>
               </button>
             </div>
@@ -126,7 +134,7 @@ const ProductDetails = () => {
 
               <button
                 type="button"
-                className="btn-soft-glow"
+                className="btn-theme"
                 onClick={handleAddToCart}
               >
                 Lägg i varukorg
@@ -134,10 +142,9 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Carousel */}
+          {/* Carousel unchanged */}
           <div className="carousel">
             <h1>Liknande Produkter</h1>
-
             <div className="slideshow">
               <div
                 id="carouselExampleControls"
@@ -148,7 +155,9 @@ const ProductDetails = () => {
                   {chunkedProducts.map((group, groupIndex) => (
                     <div
                       key={groupIndex}
-                      className={`carousel-item ${groupIndex === 0 ? 'active' : ''}`}
+                      className={`carousel-item ${
+                        groupIndex === 0 ? 'active' : ''
+                      }`}
                     >
                       <div className="row">
                         {group.map(product => (
@@ -156,12 +165,20 @@ const ProductDetails = () => {
                             <a href={`/products/${product.slug}`}>
                               <div className="product-card">
                                 <div className="product-card-image">
-                                  <img src={product.image} alt={product.alt} />
+                                  <img
+                                    src={
+                                      product.image ||
+                                      '/images/freakyfashion-placeholder.png'
+                                    }
+                                    alt={product.alt}
+                                  />
                                 </div>
                                 <div className="product-card-footer">
                                   <div className="upper-text">
                                     <h4>{product.name}</h4>
-                                    <h4 className="price">{product.price} SEK</h4>
+                                    <h4 className="price">
+                                      {product.price} SEK
+                                    </h4>
                                   </div>
                                   <p>{product.brand}</p>
                                 </div>

@@ -8,6 +8,26 @@ const db = new sqlite3.Database(
 );
 
 /**
+ * GET /api/products
+ * Public products list
+ */
+router.get('/', (req, res, next) => {
+  db.all(
+    `
+    SELECT *
+    FROM products
+    WHERE publish_date IS NOT NULL
+    ORDER BY created_at DESC
+    `,
+    [],
+    (err, products) => {
+      if (err) return next(err);
+      res.json({ products });
+    }
+  );
+});
+
+/**
  * GET /api/products/:slug
  * Public product details
  */
@@ -15,7 +35,12 @@ router.get('/:slug', (req, res, next) => {
   const slug = req.params.slug;
 
   db.get(
-    'SELECT * FROM products WHERE slug = ?',
+    `
+    SELECT *
+    FROM products
+    WHERE slug = ?
+    AND publish_date IS NOT NULL
+    `,
     [slug],
     (err, product) => {
       if (err) return next(err);
@@ -24,7 +49,14 @@ router.get('/:slug', (req, res, next) => {
       }
 
       db.all(
-        'SELECT * FROM products WHERE id != ? ORDER BY created_at DESC LIMIT 12',
+        `
+        SELECT *
+        FROM products
+        WHERE id != ?
+        AND publish_date IS NOT NULL
+        ORDER BY created_at DESC
+        LIMIT 12
+        `,
         [product.id],
         (err, relatedProducts) => {
           if (err) return next(err);

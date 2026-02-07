@@ -68,81 +68,58 @@ const Confirmation = () => {
               {data.basket.map((item, i) => (
                 <div key={i} className="checkout-single">
                   <div className="total">
-                    <h6>
-                      {item.quantity} × {item.name}
-                    </h6>
-                    <h6>{item.price * item.quantity} SEK</h6>
+
+                    <div className="total-header">
+                      <h6>
+                        {item.quantity} × {item.name}
+                      </h6>
+                      <p>{item.price} SEK</p>
+                    </div>
+
+                    <div className="total-footer">
+                      <h6>
+                        {item.price * item.quantity} SEK
+                      </h6>
+                    </div>
+
                   </div>
-                  <p>{item.price} SEK</p>
                 </div>
               ))}
             </div>
 
             {/* DESKTOP VIEW */}
-            <div className="checkout-details-regular">
+            <div className="checkout-details-regular products-view">
 
+              {/* PRODUKT */}
               <div className="product-details">
                 <h6>Produkt</h6>
                 {data.basket.map((item, i) => (
-                  <p key={i} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                    {item.name}
-                  </p>
+                  <p key={i}>{item.name}</p>
                 ))}
-                <p
-                  className={`spacer-row ${
-                    data.basket.length % 2 === 0 ? 'p1' : 'p2'
-                  }`}
-                >
-                  &nbsp;
-                </p>
               </div>
 
-              <div className="product-details">
-                <h6>Pris</h6>
-                {data.basket.map((item, i) => (
-                  <p key={i} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                    {item.price} SEK
-                  </p>
-                ))}
-                <p
-                  className={`spacer-row ${
-                    data.basket.length % 2 === 0 ? 'p1' : 'p2'
-                  }`}
-                >
-                  &nbsp;
-                </p>
-              </div>
-
-              <div className="product-details">
-                <h6>Totalt</h6>
-                {data.basket.map((item, i) => (
-                  <p key={i} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                    {item.price * item.quantity} SEK
-                  </p>
-                ))}
-                <p
-                  className={`spacer-row ${
-                    data.basket.length % 2 === 0 ? 'p1' : 'p2'
-                  }`}
-                >
-                  &nbsp;
-                </p>
-              </div>
-
+              {/* ANTAL */}
               <div className="product-details">
                 <h6>Antal</h6>
                 {data.basket.map((item, i) => (
-                  <p key={i} className={i % 2 === 0 ? 'p1' : 'p2'}>
-                    {item.quantity}
-                  </p>
+                  <p key={i}>{item.quantity}</p>
                 ))}
-                <p
-                  className={`spacer-row ${
-                    data.basket.length % 2 === 0 ? 'p1' : 'p2'
-                  }`}
-                >
-                  &nbsp;
-                </p>
+              </div>
+
+              {/* PRIS */}
+              <div className="product-details">
+                <h6>Pris</h6>
+                {data.basket.map((item, i) => (
+                  <p key={i}>{item.price} SEK</p>
+                ))}
+              </div>
+
+              {/* TOTALT */}
+              <div className="product-details">
+                <h6>Totalt</h6>
+                {data.basket.map((item, i) => (
+                  <p key={i}>{item.price * item.quantity} SEK</p>
+                ))}
               </div>
 
             </div>
