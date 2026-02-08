@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
 import { BookmarkProvider } from './context/BookmarkContext';
 import { BasketProvider } from './context/BasketContext';
+import SupportBubble from './components/SupportBubble';
 
 import AdminProducts from './pages/admin/AdminProducts';
 import NewProduct from './pages/admin/NewProduct';
@@ -47,6 +48,9 @@ function App() {
             <Route path="/favorites" element={<Favorites />} />
 
           </Routes>
+
+          <SupportBubble />
+          
         </BookmarkProvider>
       </BasketProvider>
     </BrowserRouter>

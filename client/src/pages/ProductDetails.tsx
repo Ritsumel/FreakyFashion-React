@@ -94,10 +94,14 @@ const ProductDetails = () => {
     );
   }
 
+  const productsForCarousel = relatedProducts.slice(0, 9);
+
   const chunkedProducts: Product[][] = [];
-  for (let i = 0; i < relatedProducts.length; i += 3) {
-    chunkedProducts.push(relatedProducts.slice(i, i + 3));
+  for (let i = 0; i < productsForCarousel.length; i += 3) {
+    chunkedProducts.push(productsForCarousel.slice(i, i + 3));
   }
+
+  const showControls = chunkedProducts.length > 1;
 
   return (
     <>
@@ -143,82 +147,89 @@ const ProductDetails = () => {
           </div>
 
           {/* Carousel unchanged */}
-          <div className="carousel">
-            <h1>Liknande Produkter</h1>
-            <div className="slideshow">
-              <div
-                id="carouselExampleControls"
-                className="carousel slide"
-                data-bs-ride="carousel"
-              >
-                <div className="carousel-inner">
-                  {chunkedProducts.map((group, groupIndex) => (
-                    <div
-                      key={groupIndex}
-                      className={`carousel-item ${
-                        groupIndex === 0 ? 'active' : ''
-                      }`}
-                    >
-                      <div className="row">
-                        {group.map(product => (
-                          <div key={product.id} className="col-custom">
-                            <a href={`/products/${product.slug}`}>
-                              <div className="product-card">
-                                <div className="product-card-image">
-                                  <img
-                                    src={
-                                      product.image ||
-                                      '/images/freakyfashion-placeholder.png'
-                                    }
-                                    alt={product.alt}
-                                  />
-                                </div>
-                                <div className="product-card-footer">
-                                  <div className="upper-text">
-                                    <h4>{product.name}</h4>
-                                    <h4 className="price">
-                                      {product.price} SEK
-                                    </h4>
+          {chunkedProducts.length > 0 && (
+            <div className="carousel">
+              <h1>Liknande Produkter</h1>
+              <div className="slideshow">
+                <div
+                  id="carouselExampleControls"
+                  className="carousel slide"
+                  data-bs-ride="carousel"
+                >
+                  <div className="carousel-inner">
+                    {chunkedProducts.map((group, groupIndex) => (
+                      <div
+                        key={groupIndex}
+                        className={`carousel-item ${
+                          groupIndex === 0 ? 'active' : ''
+                        }`}
+                      >
+                        <div className="row">
+                          {group.map(product => (
+                            <div key={product.id} className="col-custom">
+                              <a href={`/products/${product.slug}`}>
+                                <div className="product-card">
+                                  <div className="product-card-image">
+                                    <img
+                                      src={
+                                        product.image ||
+                                        '/images/freakyfashion-placeholder.png'
+                                      }
+                                      alt={product.alt}
+                                    />
                                   </div>
-                                  <p>{product.brand}</p>
+                                  <div className="product-card-footer">
+                                    <div className="upper-text">
+                                      <h4>{product.name}</h4>
+                                      <h4 className="price">
+                                        {product.price} SEK
+                                      </h4>
+                                    </div>
+                                    <p>{product.brand}</p>
+                                  </div>
                                 </div>
-                              </div>
-                            </a>
-                          </div>
-                        ))}
+                              </a>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+
+                  {showControls && (  
+                    <button
+                      className="carousel-control-prev"
+                      type="button"
+                      data-bs-target="#carouselExampleControls"
+                      data-bs-slide="prev"
+                    >
+                      <span
+                        className="carousel-control-prev-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                  )}
+
+                  {showControls && (  
+                    <button
+                      className="carousel-control-next"
+                      type="button"
+                      data-bs-target="#carouselExampleControls"
+                      data-bs-slide="next"
+                    >
+                      <span
+                        className="carousel-control-next-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span className="visually-hidden">Next</span>
+                    </button>
+                  )}
                 </div>
-
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#carouselExampleControls"
-                  data-bs-slide="prev"
-                >
-                  <span
-                    className="carousel-control-prev-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#carouselExampleControls"
-                  data-bs-slide="next"
-                >
-                  <span
-                    className="carousel-control-next-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
               </div>
             </div>
-          </div>
+          )}
+
         </section>
       </main>
 

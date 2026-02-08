@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useBasket } from '../context/BasketContext';
 
 type BasketItem = {
   name: string;
@@ -22,14 +23,18 @@ const Confirmation = () => {
   const [data, setData] = useState<ConfirmationData | null>(null);
   const navigate = useNavigate();
 
+  const { refreshBasket } = useBasket();
+
   useEffect(() => {
+    refreshBasket();
+
     const fetchConfirmation = async () => {
       const res = await fetch('http://localhost:5000/api/confirmation', {
         credentials: 'include',
       });
 
       if (!res.ok) {
-        navigate('/'); // no order → go home
+        navigate('/');
         return;
       }
 
@@ -38,7 +43,7 @@ const Confirmation = () => {
     };
 
     fetchConfirmation();
-  }, [navigate]);
+  }, [navigate, refreshBasket]);
 
   if (!data) {
     return <p style={{ padding: '2rem' }}>Laddar order...</p>;

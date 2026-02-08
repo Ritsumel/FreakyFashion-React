@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -8,6 +8,12 @@ const Checkout = () => {
   const { basket, updateQuantity, removeFromBasket } = useBasket();
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (basket.length === 0) {
+      navigate('/basket');
+    }
+  }, [basket, navigate]);
 
   /* Submit order */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

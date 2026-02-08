@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 const NewProduct = () => {
   const navigate = useNavigate();
@@ -13,17 +14,18 @@ const NewProduct = () => {
   const [publishDate, setPublishDate] = useState('');
   const [publish, setPublish] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const skuRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
+    const form = e.currentTarget;
 
-    /* SKU validation */
-    const skuPattern = /^[A-Z]{3}[0-9]{3}$/;
-    if (!skuPattern.test(sku)) {
-      setError('SKU måste vara i formatet ABC123');
+    if (!form.checkValidity()) {
+      form.reportValidity();
       return;
     }
+
+    e.preventDefault();
+    setError(null);
 
     const payload = {
       name,
@@ -44,6 +46,14 @@ const NewProduct = () => {
 
       if (!res.ok) {
         const data = await res.json();
+
+        // Browser pop up if SKU already exists
+        if (res.status === 409 && skuRef.current) {
+          skuRef.current.setCustomValidity(data.error);
+          skuRef.current.reportValidity();
+          return;
+        }
+
         throw new Error(data.error || 'Kunde inte skapa produkt');
       }
 
@@ -113,10 +123,14 @@ const NewProduct = () => {
           <div className="form-group sku">
             <label htmlFor="sku">SKU</label>
             <input
+              ref={skuRef}
               id="sku"
               type="text"
               value={sku}
-              onChange={e => setSku(e.target.value.toUpperCase())}
+              onChange={e => {
+                setSku(e.target.value.toUpperCase());
+                skuRef.current?.setCustomValidity('');
+              }}
               pattern="^[A-Z]{3}[0-9]{3}$"
               title="SKU måste vara i formatet ABC123"
               required
