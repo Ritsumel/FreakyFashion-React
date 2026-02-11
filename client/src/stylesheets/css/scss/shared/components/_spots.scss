@@ -6,7 +6,7 @@
     gap: 50px;
     height: 100%;
 
-    @include lg { display: flex; padding: 25px 50px; }
+    @include lg { display: flex; padding: 25px 50px; } 
 
     .spot {
         position: relative;

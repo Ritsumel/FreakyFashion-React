@@ -146,7 +146,7 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Carousel unchanged */}
+          {/* Carousel */}
           {chunkedProducts.length > 0 && (
             <div className="carousel">
               <h1>Liknande Produkter</h1>

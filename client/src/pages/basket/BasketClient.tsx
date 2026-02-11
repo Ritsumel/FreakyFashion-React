@@ -46,7 +46,7 @@ const BasketClient = ({ basket }: Props) => {
         <div className="basket-details">
           <h1>Varukorgen</h1>
 
-          {/* ================= MOBILE VIEW ================= */}
+          {/* MOBILE VIEW */}
           <div className="basket-details-mobile-view">
             {isEmpty ? (
               <div className="basket-single">
@@ -106,7 +106,7 @@ const BasketClient = ({ basket }: Props) => {
             )}
           </div>
 
-          {/* ================= DESKTOP VIEW ================= */}
+          {/* DESKTOP VIEW */}
           <div className="basket-details-regular products-view">
             {/* PRODUKT */}
             <div className="product-details">

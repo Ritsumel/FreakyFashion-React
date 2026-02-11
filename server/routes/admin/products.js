@@ -134,86 +134,109 @@ router.post('/', (req, res, next) => {
     return res.status(400).json({ error: 'Name and SKU are required' });
   }
 
-  const now = new Date()
-    .toISOString()
-    .replace('T', ' ')
-    .substring(0, 19);
+  // Normalize SKU
+  const normalizedSKU = sku.trim().toUpperCase();
 
-  const publishDate = publish ? now : null;
-
-  const insertQuery = `
-    INSERT INTO products (
-      name,
-      description,
-      brand,
-      image,
-      sku,
-      price,
-      created_at,
-      publish_date,
-      alt
-    )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-
-  db.run(
-    insertQuery,
-    [
-      name,
-      description || null,
-      brand || null,
-      image || null,
-      sku,
-      price,
-      now,
-      publishDate,
-      alt
-    ],
-    function (err) {
+  // Check if SKU already exists
+  db.get(
+    'SELECT id FROM products WHERE UPPER(sku) = ?',
+    [normalizedSKU],
+    (err, existing) => {
       if (err) return next(err);
 
-      const productId = this.lastID;
-      const slug = `${slugify(name)}-${productId}`;
+      if (existing) {
+        return res.status(409).json({
+          error: 'En produkt med denna SKU finns redan'
+        });
+      }
+
+      // Continue with insert
+      const now = new Date()
+        .toISOString()
+        .replace('T', ' ')
+        .substring(0, 19);
+
+      const publishDate = publish ? now : null;
+
+      const insertQuery = `
+        INSERT INTO products (
+          name,
+          description,
+          brand,
+          image,
+          sku,
+          price,
+          created_at,
+          publish_date,
+          alt
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
 
       db.run(
-        'UPDATE products SET slug = ? WHERE id = ?',
-        [slug, productId],
-        err2 => {
+        insertQuery,
+        [
+          name,
+          description || null,
+          brand || null,
+          image || null,
+          normalizedSKU,
+          price,
+          now,
+          publishDate,
+          alt
+        ],
+        function (err2) {
           if (err2) return next(err2);
 
-          db.all('SELECT id, name FROM categories', [], (err3, categories) => {
-            if (err3) return next(err3);
+          const productId = this.lastID;
+          const slug = `${slugify(name)}-${productId}`;
 
-            const matched = matchCategories(
-              `${name} ${description || ''} ${brand || ''}`,
-              categories,
-              normalize
-            );
+          db.run(
+            'UPDATE products SET slug = ? WHERE id = ?',
+            [slug, productId],
+            err3 => {
+              if (err3) return next(err3);
 
-            if (!matched.length) {
-              return res.status(201).json({
-                success: true,
-                productId,
-                slug
-              });
+              db.all(
+                'SELECT id, name FROM categories',
+                [],
+                (err4, categories) => {
+                  if (err4) return next(err4);
+
+                  const matched = matchCategories(
+                    `${name} ${description || ''} ${brand || ''}`,
+                    categories,
+                    normalize
+                  );
+
+                  if (!matched.length) {
+                    return res.status(201).json({
+                      success: true,
+                      productId,
+                      slug
+                    });
+                  }
+
+                  const stmt = db.prepare(
+                    'INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)'
+                  );
+
+                  matched.forEach(cat => {
+                    stmt.run(productId, cat.id);
+                  });
+
+                  stmt.finalize(() => {
+                    res.status(201).json({
+                      success: true,
+                      productId,
+                      slug
+                    });
+                  });
+                }
+              );
             }
-
-            const stmt = db.prepare(
-              'INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)'
-            );
-
-            matched.forEach(cat => {
-              stmt.run(productId, cat.id);
-            });
-
-            stmt.finalize(() => {
-              res.status(201).json({
-                success: true,
-                productId,
-                slug
-              });
-            });
-          });
+          );
         }
       );
     }

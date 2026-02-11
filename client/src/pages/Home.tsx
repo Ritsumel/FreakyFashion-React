@@ -53,13 +53,7 @@ const Home = () => {
     fetchHome();
   }, []);
 
-  if (loading) {
-    return <p style={{ padding: '2rem' }}>Laddar startsidan…</p>;
-  }
-
-  if (!hero) {
-    return <p style={{ padding: '2rem' }}>Kunde inte ladda startsidan.</p>;
-  }
+  if (loading || !hero) return null;
 
   return (
     <>

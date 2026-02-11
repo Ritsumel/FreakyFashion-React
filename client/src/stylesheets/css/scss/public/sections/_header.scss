@@ -37,6 +37,24 @@ header {
                     text-decoration: none;
                 }
 
+                @keyframes subtle-shake {
+                    0%   { transform: rotate(0); }
+                    20%  { transform: rotate(-12deg); }
+                    40%  { transform: rotate(12deg); }
+                    60%  { transform: rotate(-10deg); }
+                    80%  { transform: rotate(10deg); }
+                    100% { transform: rotate(0); }
+                }
+
+                .cart-icon i,
+                .heart-icon i {
+                transition: transform 0.2s ease;
+
+                    &:hover {
+                        animation: subtle-shake 0.4s ease;
+                    }
+                }
+
                 .cart-badge {
                     position: absolute;
                     top: -6px;
@@ -57,7 +75,7 @@ header {
 
                     border: 2px solid $bg-light;
 
-                    transform: scale(1); // IMPORTANT
+                    transform: scale(1);
 
                     &.pop {
                         animation: cart-pop 0.35s ease-out;

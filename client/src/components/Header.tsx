@@ -41,7 +41,7 @@ const Header = () => {
           </form>
 
           <div className="icons">
-            <Link to="/favorites">
+            <Link className='heart-icon' to="/favorites">
               <i className="fa-solid fa-heart"></i>
             </Link>
             <Link to="/basket" className="cart-icon">

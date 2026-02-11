@@ -48,23 +48,72 @@ router.get('/:slug', (req, res, next) => {
         return res.status(404).json({ error: 'Product not found' });
       }
 
-      db.all(
-        `
-        SELECT *
-        FROM products
-        WHERE id != ?
-        AND publish_date IS NOT NULL
-        ORDER BY created_at DESC
-        LIMIT 12
-        `,
-        [product.id],
-        (err, relatedProducts) => {
-          if (err) return next(err);
+      const relatedQuery = `
+        SELECT
+          p.id,
+          p.name,
+          p.brand,
+          p.description,
+          p.price,
+          p.image,
+          p.alt,
+          p.slug,
+          COUNT(pc2.category_id) AS relevance
+        FROM products p
+        JOIN product_categories pc2 ON pc2.product_id = p.id
+        WHERE pc2.category_id IN (
+          SELECT category_id
+          FROM product_categories
+          WHERE product_id = ?
+        )
+        AND p.id != ?
+        AND p.publish_date IS NOT NULL
+        GROUP BY p.id
+        ORDER BY relevance DESC, p.created_at DESC
+      `;
 
-          res.json({
-            product,
-            relatedProducts
-          });
+      db.all(
+        relatedQuery,
+        [product.id, product.id],
+        (err2, primaryRelated) => {
+          if (err2) return next(err2);
+
+          // If enough, trim and return
+          if (primaryRelated.length >= 9) {
+            return res.json({
+              product,
+              relatedProducts: primaryRelated.slice(0, 9)
+            });
+          }
+
+          // --- FALLBACK FILL ---
+          const missing = 9 - primaryRelated.length;
+          const usedIds = primaryRelated.map(p => p.id).concat(product.id);
+          const placeholders = usedIds.map(() => '?').join(',');
+
+          db.all(
+            `
+            SELECT id, name, brand, description, price, image, alt, slug
+            FROM products
+            WHERE publish_date IS NOT NULL
+            AND id NOT IN (${placeholders})
+            ORDER BY
+              CASE WHEN brand = ? THEN 0 ELSE 1 END,
+              created_at DESC
+            LIMIT ?
+            `,
+            [...usedIds, product.brand, missing],
+            (err3, fallback) => {
+              if (err3) return next(err3);
+
+              const combined = [...primaryRelated, ...fallback];
+
+              res.json({
+                product,
+                relatedProducts: combined
+              });
+            }
+          );
         }
       );
     }

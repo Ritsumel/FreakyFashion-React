@@ -7,8 +7,8 @@ const db = new sqlite3.Database(
   path.join(__dirname, '../../data/freaky-fashion.db')
 );
 
+// GET /api/confirmation
 router.get('/', (req, res) => {
-    console.log('✅ /api/confirmation HIT');
   const lastOrder = req.session.lastOrder;
 
   if (!lastOrder) {

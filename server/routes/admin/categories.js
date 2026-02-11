@@ -60,7 +60,7 @@ router.get('/:id', (req, res, next) => {
         return res.status(404).json({ error: 'Category not found' });
       }
 
-      // fallback image (same behavior as list page)
+      // fallback image
       if (!category.image_url || category.image_url.trim() === '') {
         category.image_url = '/images/freakyfashion-placeholder.png';
       }

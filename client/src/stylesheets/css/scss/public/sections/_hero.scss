@@ -14,8 +14,6 @@
         align-items: center;
         min-height: clamp(500px, 80vh, 650px);
         margin-bottom: -100px;
-        padding-left: 50px;
-        padding-right: 50px;
     }
     @include xl { min-height: clamp(500px, 80vh, 600px); margin-bottom: 0; }
     @media (min-width: 2000px) { min-height: clamp(500px, 80vh, 900px); }

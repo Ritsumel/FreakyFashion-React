@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-/* ===== Ensure basket exists in session ===== */
+/* Ensure basket exists in session */
 router.use((req, res, next) => {
   if (!req.session.basket) {
     req.session.basket = [];
@@ -9,14 +9,14 @@ router.use((req, res, next) => {
   next();
 });
 
-/* ===== GET /api/basket ===== */
+/* GET /api/basket */
 router.get('/', (req, res) => {
   res.json({
     basket: req.session.basket,
   });
 });
 
-/* ===== POST /api/basket/add ===== */
+/* POST /api/basket/add */
 router.post('/add', (req, res) => {
   const { id, slug, name, price, image, brand } = req.body;
   const itemId = String(id);
@@ -50,7 +50,7 @@ router.post('/add', (req, res) => {
   });
 });
 
-/* ===== POST /api/basket/update ===== */
+/* POST /api/basket/update */
 router.post('/update', (req, res) => {
   const { productId = [], quantity = [] } = req.body;
 
@@ -72,7 +72,7 @@ router.post('/update', (req, res) => {
   });
 });
 
-/* ===== DELETE /api/basket/:id ===== */
+/* DELETE /api/basket/:id */
 router.delete('/:id', (req, res) => {
   req.session.basket = req.session.basket.filter(
     item => item.id !== req.params.id
