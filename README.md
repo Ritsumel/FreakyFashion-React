@@ -79,7 +79,7 @@ The project demonstrates full CRUD functionality, REST API integration, persiste
 
 ## 🛠 Installation & Setup
 
-### 2️⃣ Backend Setup (Express)
+### Backend Setup (Express)
 
 ```bash
 cd server
@@ -91,7 +91,7 @@ API runs on: http://localhost:3000
 
 ---
 
-### 3️⃣ Frontend Setup (React + Vite)
+### Frontend Setup (React + Vite)
 
 ```bash
 cd client
