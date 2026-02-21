@@ -59,11 +59,10 @@ The project demonstrates full CRUD functionality, REST API integration, persiste
 ### Cart
 ![Cart](./screenshots/cart.png)
 
-### Checkout
-![Checkout](./screenshots/checkout.png)
-
 ### Checkout (Mobile)
 ![Checkout Mobile](./screenshots/checkout-mobile.png)
+
+---
 
 ### 🛠 Admin Panel
 
@@ -71,7 +70,7 @@ The project demonstrates full CRUD functionality, REST API integration, persiste
 ![Admin Products](./screenshots/products-list-admin.png)
 
 ### Admin – Product Details
-![Admin Products Details](./screenshots/products-details-admin.png)
+![Admin Products Details](./screenshots/product-details-admin.png)
 
 ### Admin – New Category
 ![New Category](./screenshots/new-category.png)
@@ -79,15 +78,6 @@ The project demonstrates full CRUD functionality, REST API integration, persiste
 ---
 
 ## 🛠 Installation & Setup
-
-### 1️⃣ Clone the repository
-
-```bash
-git clone https://github.com/ritsumel/FreakyFashion-React.git
-cd FreakyFashion-React
-```
-
----
 
 ### 2️⃣ Backend Setup (Express)
 
@@ -97,8 +87,7 @@ npm install
 npm run dev
 ```
 
-API runs on:  
-http://localhost:3000
+API runs on: http://localhost:3000
 
 ---
 
@@ -110,8 +99,7 @@ npm install
 npm run dev
 ```
 
-Frontend runs on:  
-http://localhost:5000
+Frontend runs on: http://localhost:5000
 
 ---
 
