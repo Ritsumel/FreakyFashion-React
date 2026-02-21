@@ -1,73 +1,120 @@
-# React + TypeScript + Vite
+# 👗 FreakyFashion-React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+FreakyFashion-React is a fullstack e-commerce web application built with a React (Vite + TypeScript) frontend and an Express + SQLite backend.
 
-Currently, two official plugins are available:
+The application includes both a customer-facing storefront and a structured admin interface for managing products and categories.  
+The project demonstrates full CRUD functionality, REST API integration, persistent database storage, and scalable component architecture.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Key Features
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### 🛒 Storefront
 
-## Expanding the ESLint configuration
+- Product listing on Home page  
+- Product Details view  
+- Search functionality  
+- Favorites system  
+- Shopping Cart  
+- Checkout flow  
+- Responsive layout  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🛠 Admin Panel
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Category List  
+- Category Details  
+- Product List  
+- Product Details  
+- Create new Category  
+- Edit Category  
+- Create new Product  
+- Delete Products  
+- Full CRUD operations via REST API  
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🖥 Tech Stack
+
+| Frontend        | Backend     | Database |
+|-----------------|------------|----------|
+| React (Vite)    | Express.js | SQLite   |
+| TypeScript      | Node.js    | File-based persistent storage |
+| SCSS            |            |          |
+
+---
+
+## 📸 Screenshots
+
+### 🛒 Storefront
+
+### Home Page (Showcase)
+![Home](./screenshots/home-showcase.png)
+
+### Product Details
+![Product Details](./screenshots/product-details.png)
+
+### Favorites
+![Favorites](./screenshots/favorites.png)
+
+### Cart
+![Cart](./screenshots/cart.png)
+
+### Checkout
+![Checkout](./screenshots/checkout.png)
+
+### Checkout (Mobile)
+![Checkout Mobile](./screenshots/checkout-mobile.png)
+
+### 🛠 Admin Panel
+
+### Admin – Product List
+![Admin Products](./screenshots/products-list-admin.png)
+
+### Admin – Product Details
+![Admin Products Details](./screenshots/products-details-admin.png)
+
+### Admin – New Category
+![New Category](./screenshots/new-category.png)
+
+---
+
+## 🛠 Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/ritsumel/FreakyFashion-React.git
+cd FreakyFashion-React
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 2️⃣ Backend Setup (Express)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd server
+npm install
+npm run dev
 ```
+
+API runs on:  
+http://localhost:3000
+
+---
+
+### 3️⃣ Frontend Setup (React + Vite)
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Frontend runs on:  
+http://localhost:5000
+
+---
+
+## 👩‍💻 Author
+
+[Michelle Lee](https://github.com/ritsumel)

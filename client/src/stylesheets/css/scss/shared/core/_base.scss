@@ -20,3 +20,8 @@ img {
     height: 100%;
     object-fit: cover;
 }
+
+// Temporary fix, designed with wrong screen settings
+html {
+  zoom: 0.67;
+}
