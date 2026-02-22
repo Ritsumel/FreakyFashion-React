@@ -40,6 +40,7 @@ The project demonstrates full CRUD functionality, REST API integration, persiste
 | React (Vite)    | Express.js | SQLite   |
 | TypeScript      | Node.js    | File-based persistent storage |
 | SCSS            |            |          |
+| HTML            |            |          |
 
 ---
 
